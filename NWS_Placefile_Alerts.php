@@ -37,7 +37,12 @@ $excludeAlerts = array(
 $excludeAlerts = array(); /* debug */
 $TZ = 'UTC';                            # default timezone for display
 $timeFormat = "d-M-Y g:ia T";           # display format for times
-$maxDistance = 350;                     # generate entries only within this distance
+//$maxDistance = 350;                     # generate entries only within this distance
+if(isset($_GET['maxDistance']) && is_numeric($_GET['maxDistance'])) { # Allow user to modify distance using parameter: ?maxDistance=250
+    $maxDistance = (float) $_GET['maxDistance']; 
+} else {
+    $maxDistance = 350;  # default value
+}
 $cacheFilename = 'response_land.json';  # store json here
 $cacheTimeMax  = 480;                   # number of seconds cache is 'fresh'
 $alertsURL = 'https://api.weather.gov/alerts/active?status=actual&region_type=land';
@@ -152,8 +157,8 @@ $output = "; $Version\n";
 $output .= "Title: NWS Alert $titleExtra - $today\n";
 $output .= "Refresh: 8\n";
 $output .= "Font: 1, 11, 1, \"Arial\"\n\n";
-if(!$showDetails) { # display icons in middle of areas
-	$output .= "IconFile: 1, 17, 17, 8, 8, alerts-icons.png\n";
+if($showIcons && !$showDetails) { # Allow user to enable icons: ?icons=y
+    $output .= "IconFile: 1, 17, 17, 8, 8, alerts-icons.png\n";
 }
 
 if($doDebug) { $output .= "; main calling JSONread\n"; }
@@ -1134,7 +1139,7 @@ Polygon 	array (
     /*:: :*/
     /*:: Official Web site: http://www.zipcodeworld.com :*/
     /*:: :*/
-    /*:: Hexa Software Development Center © All Rights Reserved 2004:*/
+    /*:: Hexa Software Development Center Â© All Rights Reserved 2004:*/
     /*:: :*/
     /*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
 
